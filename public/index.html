@@ -179,7 +179,41 @@ function field(label,name,value="",required=false,type="text",extra="",full=fals
 async function pdf(type){const m=(document.querySelector(type==="monthly"?"#month":"#emonth")?.value)||new Date().toISOString().slice(0,7);window.open(`/api/pdf/${type}/${m}`,"_blank")}
 async function logout(){await api("/api/logout",{method:"POST"});location.reload()}
 async function init(){const s=await api("/api/session");if(!s.user)return;document.querySelector("#login").style.display="none";document.querySelector("#app").style.display="flex";document.querySelector("#userName").textContent=s.user.name;document.querySelector("#date").textContent=new Intl.DateTimeFormat("tr-TR",{dateStyle:"full"}).format(new Date());nav();show("home")}
-document.querySelector("#loginForm").onsubmit=async e=>{e.preventDefault();try{await api("/api/login",{method:"POST",body:JSON.stringify({email:document.querySelector("#email").value,password:document.querySelector("#password").value})});location.reload()}catch(x){document.querySelector("#loginError").textContent=x.message}}
+document.querySelector("#loginForm").onsubmit = async function(e) {
+  e.preventDefault();
+
+  const email = document.querySelector("#email").value.trim();
+  const password = document.querySelector("#password").value;
+  const error = document.querySelector("#loginError");
+
+  error.textContent = "Giriş yapılıyor...";
+
+  try {
+    const r = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        email: email,
+        password: password
+      })
+    });
+
+    const data = await r.json();
+
+    if (!r.ok) {
+      throw new Error(data.error || "Giriş yapılamadı");
+    }
+
+    window.location.reload();
+
+  } catch (err) {
+    console.error(err);
+    error.textContent = err.message || "Giriş yapılamadı";
+  }
+};
 init();
 </script>
 </body>
