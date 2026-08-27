@@ -231,23 +231,52 @@ app.post("/api/logout", (req, res) => {
 app.get("/api/rates", async (req, res) => {
   try {
     const r = await fetch(
-      "https://api.frankfurter.app/latest?from=EUR&to=USD,GBP,CHF,TRY"
+      "https://www.tcmb.gov.tr/kurlar/today.xml"
     );
 
     if (!r.ok) {
-      throw new Error("Döviz servisi cevap vermedi");
+      throw new Error("TCMB kur servisi cevap vermedi");
     }
 
-    const data = await r.json();
-    res.json(data);
+    const xml = await r.text();
+
+    const getRate = (code) => {
+      const match = xml.match(
+        new RegExp(
+          `<Currency[^>]*Kod="${code}"[\\s\\S]*?<ForexBuying>(.*?)</ForexBuying>`
+        )
+      );
+
+      return match ? Number(match[1].replace(",", ".")) : null;
+    };
+
+    const eurTRY = getRate("EUR");
+    const usdTRY = getRate("USD");
+    const gbpTRY = getRate("GBP");
+    const chfTRY = getRate("CHF");
+
+    if (!eurTRY || !usdTRY || !gbpTRY || !chfTRY) {
+      throw new Error("TCMB kurları okunamadı");
+    }
+
+    res.json({
+      base: "EUR",
+      rates: {
+        EUR: 1,
+        USD: eurTRY / usdTRY,
+        GBP: eurTRY / gbpTRY,
+        CHF: eurTRY / chfTRY,
+        TRY: eurTRY
+      }
+    });
   } catch (e) {
     console.error("Döviz kuru hatası:", e.message);
+
     res.status(503).json({
       error: "Döviz kurları şu anda alınamadı"
     });
   }
 });
-
 /* ---------------- DASHBOARD ---------------- */
 
 app.get("/api/dashboard", auth, async (req, res) => {
