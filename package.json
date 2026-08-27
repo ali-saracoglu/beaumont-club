@@ -1,0 +1,18 @@
+{
+  "name": "beaumont-club-management",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Beaumont Club management system",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "better-sqlite3": "^11.10.0",
+    "cookie-session": "^2.1.0",
+    "express": "^5.1.0",
+    "pdfkit": "^0.17.2"
+  }
+}
