@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Beaumont Club</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{--bg:#090b0a;--panel:#121613;--panel2:#181d19;--gold:#c9a55e;--gold2:#e5c983;--text:#eeeae1;--muted:#969991;--line:#2a302b;--danger:#cf7777;--ok:#87b68d}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0,#20261f 0,#090b0a 40%);color:var(--text);font:14px Inter,Segoe UI,Arial,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}
+#login{min-height:100vh;display:grid;place-items:center;padding:20px}.loginbox{width:min(430px,100%);padding:32px;background:var(--panel);border:1px solid var(--line);border-radius:18px}.brand{font:32px Georgia,serif;color:var(--gold2);letter-spacing:2px}.sub{color:var(--muted);margin:6px 0 25px}
+input,select,textarea{width:100%;background:#0c0f0d;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:10px;outline:0}input:focus,select:focus,textarea:focus{border-color:var(--gold)}textarea{min-height:100px}
+label{font-size:12px;color:var(--muted);display:block;margin:0 0 5px}.field{margin-bottom:12px}
+.btn{border:1px solid var(--line);background:#1a201b;color:var(--text);padding:9px 12px;border-radius:8px}.btn:hover{border-color:var(--gold);color:var(--gold2)}.primary{background:var(--gold);border-color:var(--gold);color:#17130d;font-weight:700}.danger{color:#efabab}.small{padding:6px 9px;font-size:12px}
+.app{display:none;min-height:100vh}.side{width:250px;background:#090b0a;border-right:1px solid var(--line);padding:20px 14px;position:fixed;top:0;bottom:0;overflow:auto}.logo{padding:3px 9px 22px}.logo h1{font:24px Georgia,serif;color:var(--gold2);margin:0}.logo span{font-size:9px;color:var(--muted);letter-spacing:2px}
+.nav button{width:100%;display:block;text-align:left;border:0;background:transparent;color:#bdbdb6;padding:11px 12px;border-radius:8px;margin:2px 0}.nav button.active,.nav button:hover{background:#1a201b;color:var(--gold2)}
+.main{margin-left:250px;width:calc(100% - 250px)}.top{height:70px;position:sticky;top:0;z-index:4;background:rgba(9,11,10,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px}.content{padding:25px;max-width:1600px;margin:auto}
+.page{display:none}.page.active{display:block}.head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}.head h2{font:28px Georgia,serif;color:var(--gold2);margin:0}.actions{display:flex;gap:8px;flex-wrap:wrap}
+.hero{padding:28px;border:1px solid #373d36;border-radius:16px;background:linear-gradient(135deg,#1a201b,#101310);margin-bottom:15px}.hero h2{font:43px Georgia,serif;margin:0;color:var(--gold2)}.muted{color:var(--muted)}
+.grid{display:grid;gap:14px}.g4{grid-template-columns:repeat(4,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:repeat(2,1fr)}
+.card{background:linear-gradient(145deg,#171c18,#101311);border:1px solid var(--line);border-radius:13px;padding:17px}.stat small{display:block;color:var(--muted);text-transform:uppercase;letter-spacing:1px}.stat strong{display:block;color:var(--gold2);font-size:25px;margin-top:7px}
+.rates{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:20px}.rate{background:#0c0f0d;border:1px solid var(--line);padding:12px;border-radius:9px}.rate b{display:block;color:var(--gold2)}.rate span{font-size:17px}.rate small{color:var(--muted)}
+.notice{padding:12px;border:1px solid #5d4f2d;background:#1d1a12;color:#ddc78b;border-radius:9px;margin-bottom:14px}.pill{padding:4px 8px;border-radius:999px;background:#242b25;color:#c5d0c5;font-size:11px}.ok{color:#b8d8bc}.warn{color:#e3c47d}.bad{color:#efa5a5}
+.tablewrap{overflow:auto}.table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--line);white-space:nowrap}.table th{font-size:11px;color:var(--muted);text-transform:uppercase}.empty{text-align:center;padding:35px;color:var(--muted)}
+.modal{display:none;position:fixed;inset:0;z-index:20;background:#000b;align-items:center;justify-content:center;padding:18px}.modal.show{display:flex}.modalbox{width:min(780px,100%);max-height:90vh;overflow:auto;background:#151916;border:1px solid #3b423b;border-radius:15px;padding:20px}.modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.modalhead h3{font:23px Georgia,serif;color:var(--gold2);margin:0}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.full{grid-column:1/-1}
+.address{display:grid;grid-template-columns:150px 1fr auto;gap:7px;margin:7px 0}.item{display:grid;grid-template-columns:2fr 1fr auto;gap:7px;margin:7px 0}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.calhead{text-align:center;color:var(--muted);font-size:11px;padding:5px}.day{min-height:90px;border:1px solid var(--line);border-radius:8px;padding:7px;background:#101310}.day.today{border-color:var(--gold)}.event{font-size:11px;color:var(--gold2);margin-top:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chartbox{height:300px}.mobileNav{display:none}
+@media(max-width:1050px){.g4{grid-template-columns:repeat(2,1fr)}.rates{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.side{display:none}.main{margin-left:0;width:100%}.top{padding:0 14px}.content{padding:14px}.mobileNav{display:flex;position:fixed;bottom:0;left:0;right:0;background:#0a0c0b;border-top:1px solid var(--line);z-index:10;overflow:auto}.mobileNav button{flex:1;min-width:80px;background:none;border:0;color:#aaa;padding:10px 5px;font-size:10px}.mobileNav button.active{color:var(--gold2)}.g2,.g3,.g4,.formgrid{grid-template-columns:1fr}.rates{grid-template-columns:1fr 1fr}.head{align-items:flex-start}.calendar{gap:3px}.day{min-height:65px;padding:4px}.address,.item{grid-template-columns:1fr}.content{padding-bottom:75px}}
+</style>
+</head>
+<body>
+<div id="login"><form class="loginbox" id="loginForm"><div class="brand">BEAUMONT CLUB</div><div class="sub">PRIVATE CLUB MANAGEMENT</div><div class="field"><label>E-posta</label><input id="email" type="email" required></div><div class="field"><label>Şifre</label><input id="password" type="password" required></div><button class="btn primary" style="width:100%">Giriş Yap</button><p id="loginError" class="bad"></p></form></div>
+<div class="app" id="app">
+<aside class="side"><div class="logo"><h1>BEAUMONT CLUB</h1><span>PRIVATE CLUB MANAGEMENT</span></div><div class="nav" id="nav"></div></aside>
+<main class="main"><div class="top"><span id="date"></span><div class="actions"><span id="userName" class="muted"></span><button class="btn small" onclick="logout()">Çıkış</button></div></div><div class="content" id="content"></div></main>
+<div class="mobileNav" id="mobileNav"></div></div>
+<div class="modal" id="modal"><div class="modalbox"><div class="modalhead"><h3 id="modalTitle"></h3><button class="btn" onclick="closeModal()">Kapat</button></div><div id="modalBody"></div></div></div>
+<script>
+const pages=[
+["home","⌂","Ana Sayfa"],["stock","▣","Stok Paneli"],["orders","◈","Sipariş Takibi"],["customers","♙","Kayıtlı Müşteriler"],["monthly","◷","Aylık Özet"],["economy","₠","Ekonomik Durum"],["events","◆","Etkinlik Planlama"],["notes","✎","Not Defteri"],["debts","⇄","Alacak-Verecek"],["calendar","▦","Takvim"]
+];
+let current="home", calendarDate=new Date(), chart=null;
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+const euro=n=>new Intl.NumberFormat("tr-TR",{style:"currency",currency:"EUR"}).format(Number(n)||0);
+const dt=s=>new Intl.DateTimeFormat("tr-TR",{dateStyle:"medium",timeStyle:"short"}).format(new Date(s));
+const api=async(url,opt={})=>{const r=await fetch(url,{headers:{"Content-Type":"application/json"},...opt});const d=await r.json().catch(()=>({}));if(!r.ok)throw Error(d.error||"İşlem başarısız");return d};
+function nav(){const h=pages.map(([id,ic,n])=>`<button class="${current===id?"active":""}" onclick="show('${id}')">${ic} ${n}</button>`).join("");document.querySelector("#nav").innerHTML=h;document.querySelector("#mobileNav").innerHTML=h}
+async function show(id){current=id;nav();const c=document.querySelector("#content");c.innerHTML="";({home:home,stock:stock,orders:orders,customers:customers,monthly:monthly,economy:economy,events:events,notes:notes,debts:debts,calendar:calendar}[id])()}
+function modal(title,body){document.querySelector("#modalTitle").textContent=title;document.querySelector("#modalBody").innerHTML=body;document.querySelector("#modal").classList.add("show")}
+function closeModal(){document.querySelector("#modal").classList.remove("show")}
+function head(title,actions=""){return `<div class="head"><h2>${title}</h2><div class="actions">${actions}</div></div>`}
+async function home(){
+const d=await api("/api/dashboard");document.querySelector("#content").innerHTML=`
+<div class="hero"><h2>Beaumont Club</h2><p class="muted">Kulübün operasyon, stok, sipariş ve finans merkezi.</p><div class="rates" id="rates">Kur bilgileri yükleniyor…</div></div>
+${d.events.length?`<div class="notice">Bugün programınız var: ${d.events.map(e=>esc(e.title)).join(", ")}</div>`:""}
+<div class="grid g4"><div class="card stat"><small>Bugünkü Sipariş</small><strong>${d.todayOrders}</strong></div><div class="card stat"><small>Bu Ay Sipariş</small><strong>${d.monthOrders}</strong></div><div class="card stat"><small>Bu Ay Ciro</small><strong>${euro(d.monthRevenue)}</strong></div><div class="card stat"><small>Bu Ay Kâr</small><strong>${euro(d.monthProfit)}</strong></div></div>
+<div class="grid g2" style="margin-top:14px"><div class="card"><h3>Bugünkü Program</h3>${d.events.length?d.events.map(e=>`<p><b>${esc(e.event_time)}</b> · ${esc(e.title)} <span class="muted">— ${esc(e.venue)}</span></p>`).join(""):"<p class='empty'>Program yok.</p>"}</div><div class="card"><h3>Hava Durumu</h3><div id="weather">Yükleniyor…</div></div></div>
+<div class="card" style="margin-top:14px"><h3>Son Siparişler</h3><div id="recent"></div></div>`;
+const o=await api("/api/orders");document.querySelector("#recent").innerHTML=o.slice(0,6).map(x=>`<div class="kpi"><span>${dt(x.order_date)} · ${esc(x.buyer_name)}</span><b>${euro(x.revenue)}</b></div>`).join("")||"<div class='empty'>Sipariş yok.</div>";
+loadRates();
+loadWeather();
+
+async function loadRates(){
+  const box = document.querySelector("#rates");
+
+  try {
+    const r = await fetch("/api/rates");
+
+    if (!r.ok) {
+      throw new Error("Kur alınamadı");
+    }
+
+const d = await r.json();
+
+const eurTRY = d.rates.TRY;
+const usdTRY = eurTRY / d.rates.USD;
+const gbpTRY = eurTRY / d.rates.GBP;
+const chfTRY = eurTRY / d.rates.CHF;
+
+box.innerHTML = `
+  <div class="rate">
+    <b>Dolar</b>
+    <span>${usdTRY.toLocaleString("tr-TR",{maximumFractionDigits:4})} ₺</span>
+    <small>1 USD → TL</small>
+  </div>
+
+  <div class="rate">
+    <b>Pound</b>
+    <span>${gbpTRY.toLocaleString("tr-TR",{maximumFractionDigits:4})} ₺</span>
+    <small>1 GBP → TL</small>
+  </div>
+
+  <div class="rate">
+    <b>İsviçre Frangı</b>
+    <span>${chfTRY.toLocaleString("tr-TR",{maximumFractionDigits:4})} ₺</span>
+    <small>1 CHF → TL</small>
+  </div>
+
+  <div class="rate">
+    <b>Euro</b>
+    <span>${eurTRY.toLocaleString("tr-TR",{maximumFractionDigits:4})} ₺</span>
+    <small>1 EUR → TL</small>
+  </div>
+`;
+
+  } catch(e) {
+    console.error("Kur yükleme hatası:", e);
+
+    box.innerHTML = `
+      <div class="rate" style="grid-column:1/-1">
+        <b>Döviz kurları alınamadı</b>
+        <small>İnternet bağlantısını kontrol edin.</small>
+      </div>
+    `;
+  }
+}
+
+async function loadWeather(){
+  try{
+    const d=await fetch("https://api.open-meteo.com/v1/forecast?latitude=39.9179&longitude=32.8627&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=Europe%2FIstanbul").then(r=>r.json());
+
+    document.querySelector("#weather").innerHTML=`
+      <b style="font-size:30px;color:var(--gold2)">${d.current.temperature_2m}°C</b>
+      <p>Nem %${d.current.relative_humidity_2m} · Rüzgâr ${d.current.wind_speed_10m} km/s</p>
+      <span class="muted">Ankara · Çankaya</span>
+    `;
+  }catch{
+    document.querySelector("#weather").textContent="Hava durumu alınamadı.";
+  }
+}
+}
+async function stock(){const a=await api("/api/stocks");document.querySelector("#content").innerHTML=head("Stok Paneli",`<button class="btn primary" onclick="stockForm()">+ Yeni Puro</button>`)+`<div class="card tablewrap"><table class="table"><thead><tr><th>Puro</th><th>Stok</th><th>Humidor</th><th>Satış</th><th>Maliyet</th><th>Paket</th><th></th></tr></thead><tbody>${a.map(s=>`<tr><td><b>${esc(s.name)}</b></td><td><span class="pill ${s.qty===0?"bad":s.qty<=5?"warn":"ok"}">${s.qty}</span> <button class="btn small" onclick="adjustStock(${s.id},1)">+</button> <button class="btn small" onclick="adjustStock(${s.id},-1)">−</button></td><td>${esc(s.humidor)}</td><td>${euro(s.sale_price)}</td><td>${euro(s.cost_price)}</td><td>${s.pack_qty}</td><td><button class="btn small" onclick="stockForm(${s.id})">Düzenle</button> <button class="btn small danger" onclick="delStock(${s.id})">Sil</button></td></tr>`).join("")||`<tr><td colspan="7" class="empty">Stok yok.</td></tr>`}</tbody></table></div>`}
+async function adjustStock(id,d){await api(`/api/stocks/${id}/adjust`,{method:"POST",body:JSON.stringify({delta:d})});stock()}
+async function stockForm(id){const s=id?(await api("/api/stocks")).find(x=>x.id==id):{name:"",qty:0,humidor:"",sale_price:0,cost_price:0,pack_qty:1};modal(id?"Puro Düzenle":"Yeni Puro",`<form onsubmit="saveStock(event,${id||0})"><div class="formgrid">${field("Puro Adı","name",s.name,true)}${field("Stok Adedi","qty",s.qty,false,"number")} ${field("Humidor Numarası","humidor",s.humidor)}${field("Satış Fiyatı (€)","sale_price",s.sale_price,false,"number","step='.01'")} ${field("Maliyet (€)","cost_price",s.cost_price,false,"number","step='.01'")} ${field("Paket Adedi","pack_qty",s.pack_qty,false,"number")}</div><button class="btn primary">Kaydet</button></form>`)}
+async function saveStock(e,id){e.preventDefault();const b=Object.fromEntries(new FormData(e.target));await api(id?`/api/stocks/${id}`:"/api/stocks",{method:id?"PUT":"POST",body:JSON.stringify(b)});closeModal();stock()}
+async function delStock(id){if(confirm("Stok kaydı silinsin mi?")){await api(`/api/stocks/${id}`,{method:"DELETE"});stock()}}
+async function orders(){const a=await api("/api/orders");document.querySelector("#content").innerHTML=head("Sipariş Takibi",`<button class="btn primary" onclick="orderForm()">+ Yeni Sipariş</button>`)+`<div class="card tablewrap"><table class="table"><thead><tr><th>Tarih</th><th>Alıcı</th><th>Ürünler</th><th>Ciro</th><th>Kâr</th><th></th></tr></thead><tbody>${a.map(o=>`<tr><td>${dt(o.order_date)}</td><td><b>${esc(o.buyer_name)}</b></td><td>${o.items.map(i=>`${esc(i.product_name)} × ${i.qty}`).join(", ")}</td><td>${euro(o.revenue)}</td><td class="ok">${euro(o.profit)}</td><td><button class="btn small" onclick="orderDetail(${o.id})">Detay</button> <button class="btn small danger" onclick="delOrder(${o.id})">Sil</button></td></tr>`).join("")||`<tr><td colspan="6" class="empty">Sipariş yok.</td></tr>`}</tbody></table></div>`}
+async function orderForm(){const [cs,ss]=await Promise.all([api("/api/customers"),api("/api/stocks")]);modal("Yeni Sipariş",`<form onsubmit="saveOrder(event)"><div class="formgrid"><div class="field"><label>Tarih</label><input name="order_date" type="datetime-local" value="${new Date().toISOString().slice(0,16)}"></div><div class="field"><label>Kayıtlı Müşteri</label><select name="customer_id" onchange="fillOrderCustomer(this.value)"><option value="">Seç…</option>${cs.map(c=>`<option value="${c.id}">${esc(c.name)} — ${esc(c.phone)}</option>`).join("")}</select></div>${field("Alıcı Adı","buyer_name","",true)}${field("Telefon","phone","")}<div class="field full"><label>Adres</label><textarea id="ordAddr" name="address"></textarea></div><div class="field full"><label>Stoktan Ürünler</label><div id="orderItems"></div><button type="button" class="btn" onclick="addItem()">+ Puro Ekle</button></div><div class="field full"><label>Not</label><textarea name="manual_note"></textarea></div></div><div id="orderCalc" class="notice">Toplam: €0.00 · Kâr: €0.00</div><button class="btn primary">Siparişi Tamamla</button></form>`);window._stocks=ss;addItem()}
+function fillOrderCustomer(id){if(!id)return;api("/api/customers").then(cs=>{const c=cs.find(x=>x.id==id);document.querySelector('[name=buyer_name]').value=c.name;document.querySelector('[name=phone]').value=c.phone||"";document.querySelector("#ordAddr").value=c.addresses?.[0]?.address||""})}
+function addItem(){const w=document.querySelector("#orderItems"),r=document.createElement("div");r.className="item";r.innerHTML=`<select class="prod"><option value="">Puro seç…</option>${window._stocks.map(s=>`<option value="${s.id}">${esc(s.name)} — ${s.qty} adet</option>`).join("")}</select><input class="iqty" type="number" min="1" value="1"><button type="button" class="btn danger" onclick="this.parentElement.remove();calcOrder()">×</button>`;w.appendChild(r);r.querySelector(".prod").onchange=calcOrder;r.querySelector(".iqty").oninput=calcOrder}
+function calcOrder(){let t=0,p=0;document.querySelectorAll("#orderItems .item").forEach(r=>{const s=window._stocks.find(x=>x.id==r.querySelector(".prod").value),q=+(r.querySelector(".iqty").value||0);if(s){t+=s.sale_price*q;p+=(s.sale_price-s.cost_price)*q}});document.querySelector("#orderCalc").textContent=`Toplam: ${euro(t)} · Kâr: ${euro(p)}`}
+async function saveOrder(e){e.preventDefault();const b=Object.fromEntries(new FormData(e.target));b.items=[...document.querySelectorAll("#orderItems .item")].map(r=>({stock_id:+r.querySelector(".prod").value,qty:+r.querySelector(".iqty").value})).filter(x=>x.stock_id&&x.qty);try{await api("/api/orders",{method:"POST",body:JSON.stringify(b)});closeModal();orders()}catch(e){alert(e.message)}}
+async function orderDetail(id){const o=(await api("/api/orders")).find(x=>x.id==id);modal("Sipariş Detayı",`<div class="card"><p><b>Tarih:</b> ${dt(o.order_date)}</p><p><b>Alıcı:</b> ${esc(o.buyer_name)}</p><p><b>Telefon:</b> ${esc(o.phone)}</p><p><b>Adres:</b> ${esc(o.address)}</p><p><b>Sipariş:</b><br>${o.items.map(i=>`${esc(i.product_name)} × ${i.qty}`).join("<br>")}</p><p><b>Toplam:</b> ${euro(o.revenue)}</p><p class="ok"><b>Kâr:</b> ${euro(o.profit)}</p></div>`)}
+async function delOrder(id){if(confirm("Sipariş silinsin ve ürünler stoğa geri dönsün mü?")){await api(`/api/orders/${id}`,{method:"DELETE"});orders()}}
+async function customers(){const a=await api("/api/customers");document.querySelector("#content").innerHTML=head("Kayıtlı Müşteriler",`<button class="btn primary" onclick="customerForm()">+ Müşteri</button>`)+`<div class="card tablewrap"><table class="table"><thead><tr><th>Ad Soyad</th><th>Telefon</th><th></th></tr></thead><tbody>${a.map(c=>`<tr><td><b>${esc(c.name)}</b></td><td>${esc(c.phone)}</td><td><button class="btn small" onclick="customerDetail(${c.id})">Detay</button> <button class="btn small" onclick="customerForm(${c.id})">Düzenle</button> <button class="btn small danger" onclick="delCustomer(${c.id})">Sil</button></td></tr>`).join("")||`<tr><td colspan="3" class="empty">Müşteri yok.</td></tr>`}</tbody></table></div>`}
+function addrRow(a={title:"",address:""}){return `<div class="address"><input class="at" placeholder="Adres başlığı" value="${esc(a.title)}"><input class="aa" placeholder="Adres" value="${esc(a.address)}"><button type="button" class="btn danger" onclick="this.parentElement.remove()">×</button></div>`}
+async function customerForm(id){const c=id?(await api("/api/customers")).find(x=>x.id==id):{name:"",phone:"",notes:"",addresses:[]};modal(id?"Müşteri Düzenle":"Müşteri Kaydet",`<form onsubmit="saveCustomer(event,${id||0})"><div class="formgrid">${field("Ad Soyad","name",c.name,true)}${field("Telefon","phone",c.phone)}<div class="field full"><label>Adresler</label><div id="addresses">${(c.addresses||[]).map(addrRow).join("")}</div><button type="button" class="btn" onclick="document.querySelector('#addresses').insertAdjacentHTML('beforeend',addrRow())">+ Alternatif Adres</button></div><div class="field full"><label>Müşteri Notları</label><textarea name="notes">${esc(c.notes)}</textarea></div></div><button class="btn primary">Kaydet</button></form>`)}
+async function saveCustomer(e,id){e.preventDefault();const b=Object.fromEntries(new FormData(e.target));b.addresses=[...document.querySelectorAll("#addresses .address")].map(r=>({title:r.querySelector(".at").value,address:r.querySelector(".aa").value}));await api(id?`/api/customers/${id}`:"/api/customers",{method:id?"PUT":"POST",body:JSON.stringify(b)});closeModal();customers()}
+async function customerDetail(id){const c=(await api("/api/customers")).find(x=>x.id==id);modal(c.name,`<p><b>Telefon:</b> ${esc(c.phone)}</p><h4>Adresler</h4>${c.addresses.map(a=>`<div class="card"><b>${esc(a.title)}</b><br>${esc(a.address)}</div>`).join("")||"<p class='empty'>Adres yok.</p>"}<h4>Notlar</h4><p>${esc(c.notes)||"Not yok."}</p>`)}
+async function delCustomer(id){if(confirm("Müşteri silinsin mi?")){await api(`/api/customers/${id}`,{method:"DELETE"});customers()}}
+function monthOptions(){const now=new Date(),a=[];for(let i=0;i<24;i++){const d=new Date(now.getFullYear(),now.getMonth()-i,1),m=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;a.push(`<option value="${m}">${new Intl.DateTimeFormat("tr-TR",{month:"long",year:"numeric"}).format(d)}</option>`)}return a.join("")}
+async function monthly(){document.querySelector("#content").innerHTML=head("Aylık Özet",`<select id="month" onchange="monthlyData()">${monthOptions()}</select> <button class="btn" onclick="pdf('monthly')">PDF</button>`)+`<div id="monthlyBody"></div>`;monthlyData()}
+async function monthlyData(){const m=document.querySelector("#month").value,d=await api(`/api/monthly/${m}`);document.querySelector("#monthlyBody").innerHTML=`<div class="grid g3"><div class="card stat"><small>Sipariş</small><strong>${d.count}</strong></div><div class="card stat"><small>Ciro</small><strong>${euro(d.revenue)}</strong></div><div class="card stat"><small>Kâr</small><strong>${euro(d.profit)}</strong></div></div><div class="grid g2" style="margin-top:14px"><div class="card"><h3>Ciro / Kâr</h3><div class="chartbox"><canvas id="chart"></canvas></div></div><div class="card tablewrap"><table class="table"><thead><tr><th>Tarih</th><th>Müşteri</th><th>Ciro</th><th>Kâr</th></tr></thead><tbody>${d.orders.map(o=>`<tr><td>${dt(o.order_date)}</td><td>${esc(o.buyer_name)}</td><td>${euro(o.revenue)}</td><td>${euro(o.profit)}</td></tr>`).join("")||`<tr><td colspan="4" class="empty">Sipariş yok.</td></tr>`}</tbody></table></div></div>`;if(chart)chart.destroy();chart=new Chart(document.querySelector("#chart"),{type:"bar",data:{labels:["Ciro","Kâr"],datasets:[{label:"EUR",data:[d.revenue,d.profit]}]},options:{responsive:true,maintainAspectRatio:false}})}
+async function economy(){document.querySelector("#content").innerHTML=head("Ekonomik Durum Takibi",`<select id="emonth" onchange="economyData()">${monthOptions()}</select> <button class="btn primary" onclick="txForm()">+ Gelir/Gider</button> <button class="btn" onclick="pdf('economy')">PDF</button>`)+`<div id="economyBody"></div>`;economyData()}
+async function economyData(){const d=await api(`/api/economy/${document.querySelector("#emonth").value}`);document.querySelector("#economyBody").innerHTML=`<div class="grid g3"><div class="card stat"><small>Gelir</small><strong>${euro(d.income)}</strong></div><div class="card stat"><small>Gider</small><strong>${euro(d.expense)}</strong></div><div class="card stat"><small>Net</small><strong>${euro(d.net)}</strong></div></div><div class="card tablewrap" style="margin-top:14px"><table class="table"><thead><tr><th>Tarih</th><th>Tür</th><th>Kategori</th><th>Açıklama</th><th>Tutar</th><th></th></tr></thead><tbody>${d.rows.map(t=>`<tr><td>${dt(t.tx_date)}</td><td>${t.type==="income"?"Gelir":"Gider"}</td><td>${esc(t.category)}</td><td>${esc(t.description)}</td><td>${euro(t.amount)}</td><td>${t.order_id?"Otomatik":`<button class="btn small danger" onclick="delTx(${t.id})">Sil</button>`}</td></tr>`).join("")||`<tr><td colspan="6" class="empty">Kayıt yok.</td></tr>`}</tbody></table></div>`}
+async function txForm(){modal("Gelir / Gider",`<form onsubmit="saveTx(event)"><div class="formgrid">${field("Tarih","tx_date",new Date().toISOString().slice(0,16),false,"datetime-local")}${field("Tutar (€)","amount","",true,"number","step='.01'")}<div class="field"><label>Tür</label><select name="type"><option value="income">Gelir</option><option value="expense">Gider</option></select></div><div class="field"><label>Kategori</label><select name="category"><option>Ürün Siparişi</option><option>Satış</option><option>Bakım Giderleri</option><option>Zaiyat</option><option>Etkinlik Geliri</option><option>Etkinlik Gideri</option><option>Diğer</option></select></div>${field("Açıklama","description","",false,"text","",true)}</div><button class="btn primary">Kaydet</button></form>`)}
+async function saveTx(e){e.preventDefault();await api("/api/transactions",{method:"POST",body:JSON.stringify(Object.fromEntries(new FormData(e.target)))});closeModal();economy()}
+async function delTx(id){if(confirm("Kayıt silinsin mi?")){await api(`/api/transactions/${id}`,{method:"DELETE"});economy()}}
+async function events(){const a=await api("/api/events");document.querySelector("#content").innerHTML=head("Etkinlik Planlama",`<button class="btn primary" onclick="eventForm()">+ Yeni Etkinlik</button>`)+`<div class="card tablewrap"><table class="table"><thead><tr><th>Tarih</th><th>Etkinlik</th><th>Mekan</th><th>Saat</th><th>Ücret</th><th>Gelir</th><th>Gider</th><th>Kâr</th><th></th></tr></thead><tbody>${a.map(e=>`<tr><td>${e.event_date}</td><td>${esc(e.title)}</td><td>${esc(e.venue)}</td><td>${esc(e.event_time)}</td><td>${euro(e.fee)}</td><td>${euro(e.income)}</td><td>${euro(e.expense)}</td><td>${euro(e.profit)}</td><td><button class="btn small" onclick="eventForm(${e.id})">Düzenle</button> <button class="btn small danger" onclick="delEvent(${e.id})">Sil</button></td></tr>`).join("")||`<tr><td colspan="9" class="empty">Etkinlik yok.</td></tr>`}</tbody></table></div>`}
+async function eventForm(id){const e=id?(await api("/api/events")).find(x=>x.id==id):{title:"",menu:"",venue:"",event_date:new Date().toISOString().slice(0,10),event_time:"19:00",fee:0,members:"",income:0,expense:0};modal(id?"Etkinlik Düzenle":"Yeni Etkinlik",`<form onsubmit="saveEvent(event,${id||0})"><div class="formgrid">${field("Etkinlik Başlığı","title",e.title,true)}${field("Menü","menu",e.menu)}${field("Mekan","venue",e.venue)}${field("Tarih","event_date",e.event_date,false,"date")}${field("Saat","event_time",e.event_time,false,"time")}${field("Ücret (€)","fee",e.fee,false,"number","step='.01'")}${field("Katılacak Üyeler","members",e.members,false,"text","",true)}${field("Gelir (€)","income",e.income,false,"number","step='.01'")}${field("Gider (€)","expense",e.expense,false,"number","step='.01'")}</div><button class="btn primary">Kaydet</button></form>`)}
+async function saveEvent(ev,id){ev.preventDefault();const b=Object.fromEntries(new FormData(ev.target));await api(id?`/api/events/${id}`:"/api/events",{method:id?"PUT":"POST",body:JSON.stringify(b)});closeModal();events()}
+async function delEvent(id){if(confirm("Etkinlik silinsin mi?")){await api(`/api/events/${id}`,{method:"DELETE"});events()}}
+async function notes(){const a=await api("/api/notes");document.querySelector("#content").innerHTML=head("Not Defteri",`<button class="btn primary" onclick="noteForm()">+ Yeni Not</button>`)+`<div class="grid g3">${a.map(n=>`<div class="card"><h3>${esc(n.title)}</h3><p style="white-space:pre-wrap">${esc(n.body)}</p><small class="muted">${dt(n.updated_at)}</small><div class="actions" style="margin-top:10px"><button class="btn small" onclick="noteForm(${n.id})">Düzenle</button><button class="btn small danger" onclick="delNote(${n.id})">Sil</button></div></div>`).join("")||"<div class='card empty'>Not yok.</div>"}</div>`}
+async function noteForm(id){const n=id?(await api("/api/notes")).find(x=>x.id==id):{title:"",body:""};modal(id?"Not Düzenle":"Yeni Not",`<form onsubmit="saveNote(event,${id||0})">${field("Başlık","title",n.title,true)}${field("Not","body",n.body,false,"text","",true)}<button class="btn primary">Kaydet</button></form>`)}
+async function saveNote(e,id){e.preventDefault();await api(id?`/api/notes/${id}`:"/api/notes",{method:id?"PUT":"POST",body:JSON.stringify(Object.fromEntries(new FormData(e.target)))});closeModal();notes()}
+async function delNote(id){if(confirm("Not silinsin mi?")){await api(`/api/notes/${id}`,{method:"DELETE"});notes()}}
+async function debts(){const a=await api("/api/debts");document.querySelector("#content").innerHTML=head("Alacak-Verecek Durumu",`<button class="btn primary" onclick="debtForm()">+ Kayıt</button>`)+`<div class="card tablewrap"><table class="table"><thead><tr><th>Kişi</th><th>Tür</th><th>Açıklama</th><th>Tutar</th><th>Durum</th><th></th></tr></thead><tbody>${a.map(d=>`<tr><td>${esc(d.person)}</td><td>${d.type==="alacak"?"Alacağım":"Vereceğim"}</td><td>${esc(d.description)}</td><td>${euro(d.amount)}</td><td>${esc(d.status)}</td><td><button class="btn small" onclick="debtForm(${d.id})">Düzenle</button><button class="btn small danger" onclick="delDebt(${d.id})">Sil</button></td></tr>`).join("")||`<tr><td colspan="6" class="empty">Kayıt yok.</td></tr>`}</tbody></table></div>`}
+async function debtForm(id){const d=id?(await api("/api/debts")).find(x=>x.id==id):{person:"",type:"alacak",description:"",amount:0,status:"Açık"};modal("Alacak / Verecek",`<form onsubmit="saveDebt(event,${id||0})">${field("Kişi","person",d.person,true)}<div class="field"><label>Tür</label><select name="type"><option value="alacak" ${d.type==="alacak"?"selected":""}>Alacağım</option><option value="verecek" ${d.type==="verecek"?"selected":""}>Vereceğim</option></select></div>${field("Tutar (€)","amount",d.amount,false,"number","step='.01'")}${field("Açıklama","description",d.description)}<div class="field"><label>Durum</label><select name="status"><option ${d.status==="Açık"?"selected":""}>Açık</option><option ${d.status==="Tamamlandı"?"selected":""}>Tamamlandı</option></select></div><button class="btn primary">Kaydet</button></form>`)}
+async function saveDebt(e,id){e.preventDefault();await api(id?`/api/debts/${id}`:"/api/debts",{method:id?"PUT":"POST",body:JSON.stringify(Object.fromEntries(new FormData(e.target)))});closeModal();debts()}
+async function delDebt(id){if(confirm("Kayıt silinsin mi?")){await api(`/api/debts/${id}`,{method:"DELETE"});debts()}}
+async function calendar(){const a=await api("/api/events");document.querySelector("#content").innerHTML=head("Takvim",`<button class="btn" onclick="calendarDate.setMonth(calendarDate.getMonth()-1);calendar()">‹</button><b>${new Intl.DateTimeFormat("tr-TR",{month:"long",year:"numeric"}).format(calendarDate)}</b><button class="btn" onclick="calendarDate.setMonth(calendarDate.getMonth()+1);calendar()">›</button>`)+`<div class="card"><div class="calendar" id="cal"></div></div>`;const y=calendarDate.getFullYear(),m=calendarDate.getMonth(),first=new Date(y,m,1),start=(first.getDay()+6)%7,last=new Date(y,m+1,0).getDate();let h=["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"].map(x=>`<div class="calhead">${x}</div>`).join("");for(let i=0;i<start;i++)h+="<div></div>";for(let d=1;d<=last;d++){const ds=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`,ev=a.filter(x=>x.event_date===ds);h+=`<div class="day ${ds===new Date().toISOString().slice(0,10)?"today":""}"><b>${d}</b>${ev.map(x=>`<div class="event">◆ ${esc(x.title)}</div>`).join("")}</div>`}document.querySelector("#cal").innerHTML=h}
+function field(label,name,value="",required=false,type="text",extra="",full=false){return `<div class="field ${full?"full":""}"><label>${label}</label>${type==="text"&&full?`<textarea name="${name}" ${required?"required":""}>${esc(value)}</textarea>`:`<input name="${name}" type="${type}" value="${esc(value)}" ${required?"required":""} ${extra}>`}</div>`}
+async function pdf(type){const m=(document.querySelector(type==="monthly"?"#month":"#emonth")?.value)||new Date().toISOString().slice(0,7);window.open(`/api/pdf/${type}/${m}`,"_blank")}
+async function logout(){await api("/api/logout",{method:"POST"});location.reload()}
+async function init(){const s=await api("/api/session");if(!s.user)return;document.querySelector("#login").style.display="none";document.querySelector("#app").style.display="flex";document.querySelector("#userName").textContent=s.user.name;document.querySelector("#date").textContent=new Intl.DateTimeFormat("tr-TR",{dateStyle:"full"}).format(new Date());nav();show("home")}
+document.querySelector("#loginForm").onsubmit=async e=>{e.preventDefault();try{await api("/api/login",{method:"POST",body:JSON.stringify({email:document.querySelector("#email").value,password:document.querySelector("#password").value})});location.reload()}catch(x){document.querySelector("#loginError").textContent=x.message}}
+init();
+</script>
+</body>
+</html>
